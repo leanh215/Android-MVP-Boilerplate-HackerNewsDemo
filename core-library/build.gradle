@@ -1,0 +1,58 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 26
+    buildToolsVersion "26.0.1"
+
+    defaultConfig {
+        minSdkVersion 16
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+ext {
+    thirtyinchVersion = '0.8.0'
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:appcompat-v7:26.0.1'
+    testCompile 'junit:junit:4.12'
+
+    // ThirtyInch MVP framework
+
+    compile "net.grandcentrix.thirtyinch:thirtyinch:$thirtyinchVersion"
+    compile "net.grandcentrix.thirtyinch:thirtyinch-rx2:$thirtyinchVersion"
+    compile "net.grandcentrix.thirtyinch:thirtyinch-logginginterceptor:$thirtyinchVersion"
+
+    // Material dialog
+    compile 'com.afollestad.material-dialogs:core:0.9.4.7'
+
+    // gson & retrofit
+    compile 'com.google.code.gson:gson:2.7'
+    compile 'com.squareup.retrofit2:retrofit:2.3.0'
+
+    // Fresco
+    compile 'com.facebook.fresco:fresco:1.5.0'
+
+    // Timber
+    compile 'com.jakewharton.timber:timber:4.5.1'
+
+    // Stetho
+    compile 'com.facebook.stetho:stetho:1.5.0'
+    compile 'com.facebook.stetho:stetho-okhttp3:1.5.0'
+}
