@@ -5,35 +5,32 @@ import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class TopStory {
+public class Comment {
 
     @SerializedName("by")
     @Expose
     private String by;
-    @SerializedName("descendants")
-    @Expose
-    private Integer descendants;
     @SerializedName("id")
     @Expose
     private Integer id;
     @SerializedName("kids")
     @Expose
     private List<Integer> kids = null;
-    @SerializedName("score")
+    @SerializedName("parent")
     @Expose
-    private Integer score;
+    private Integer parent;
+    @SerializedName("text")
+    @Expose
+    private String text;
     @SerializedName("time")
     @Expose
     private long time;
-    @SerializedName("title")
-    @Expose
-    private String title;
     @SerializedName("type")
     @Expose
     private String type;
-    @SerializedName("url")
+    @SerializedName("deleted")
     @Expose
-    private String url;
+    private boolean deleted;
 
     public String getBy() {
         return by;
@@ -41,14 +38,6 @@ public class TopStory {
 
     public void setBy(String by) {
         this.by = by;
-    }
-
-    public Integer getDescendants() {
-        return descendants;
-    }
-
-    public void setDescendants(Integer descendants) {
-        this.descendants = descendants;
     }
 
     public Integer getId() {
@@ -67,12 +56,20 @@ public class TopStory {
         this.kids = kids;
     }
 
-    public Integer getScore() {
-        return score;
+    public Integer getParent() {
+        return parent;
     }
 
-    public void setScore(Integer score) {
-        this.score = score;
+    public void setParent(Integer parent) {
+        this.parent = parent;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
 
     public long getTime() {
@@ -83,14 +80,6 @@ public class TopStory {
         this.time = time;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public String getType() {
         return type;
     }
@@ -99,12 +88,11 @@ public class TopStory {
         this.type = type;
     }
 
-    public String getUrl() {
-        return url;
+    public boolean isDeleted() {
+        return deleted;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
-
 }

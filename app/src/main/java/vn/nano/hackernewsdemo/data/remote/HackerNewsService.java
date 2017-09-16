@@ -12,10 +12,10 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
-import retrofit2.http.PATCH;
 import retrofit2.http.Path;
 import vn.nano.core_library.utils.ApiErrorUtils;
-import vn.nano.hackernewsdemo.data.model.TopStory;
+import vn.nano.hackernewsdemo.data.model.Comment;
+import vn.nano.hackernewsdemo.data.model.Story;
 
 /**
  * Created by alex on 9/14/17.
@@ -29,13 +29,16 @@ public interface HackerNewsService {
     Observable<List<Integer>> getTopStoryIds();
 
     @GET("item/{story_id}.json")
-    Observable<TopStory> getTopStory(@Path("story_id") int storyId);
+    Observable<Story> getStory(@Path("story_id") int storyId);
+
+    @GET("item/{comment_id}.json")
+    Observable<Comment> getComment(@Path("comment_id") int commentId);
 
     class Factory {
         public static HackerNewsService create() {
 
             OkHttpClient client = new OkHttpClient.Builder()
-                    .addInterceptor(new StethoInterceptor())
+                    .addNetworkInterceptor(new StethoInterceptor())
                     .build();
 
             Retrofit retrofit = new Retrofit.Builder()

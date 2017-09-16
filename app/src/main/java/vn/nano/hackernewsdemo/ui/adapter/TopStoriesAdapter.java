@@ -7,13 +7,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import vn.nano.hackernewsdemo.R;
-import vn.nano.hackernewsdemo.data.model.TopStory;
+import vn.nano.hackernewsdemo.data.model.Story;
 import vn.nano.hackernewsdemo.databinding.ItemTopStoryBinding;
 import vn.nano.hackernewsdemo.utils.Callback;
 
@@ -21,16 +20,19 @@ import vn.nano.hackernewsdemo.utils.Callback;
  * Created by alex on 9/15/17.
  */
 
-public class TopStoriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class TopStoriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
+    implements View.OnClickListener{
 
     private List<Integer> topStoryIds;
-    private Map<Integer, TopStory> mapStoryContent;
+    private Map<Integer, Story> mapStories;
     private Callback<Integer> getStoryCallback;
+    private Callback<Story> getCommentCallback;
 
-    public TopStoriesAdapter(Callback<Integer> getStoryCallback) {
+    public TopStoriesAdapter(Callback<Integer> getStoryCallback, Callback<Story> getCommentCallback) {
         topStoryIds = new ArrayList<>();
-        mapStoryContent = new HashMap<>();
+        mapStories = new HashMap<>();
         this.getStoryCallback = getStoryCallback;
+        this.getCommentCallback = getCommentCallback;
     }
 
     public void setTopStoryIds(List<Integer> topStoryIds) {
@@ -38,8 +40,8 @@ public class TopStoriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         notifyDataSetChanged();
     }
 
-    public void addTopStory(TopStory topStory) {
-        mapStoryContent.put(topStory.getId(), topStory);
+    public void addTopStory(Story topStory) {
+        mapStories.put(topStory.getId(), topStory);
         notifyDataSetChanged();
     }
 
@@ -54,7 +56,7 @@ public class TopStoriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         ItemTopStoryBinding binding = ((TopStoryViewHolder)holder).binding;
         int topStoryId = topStoryIds.get(position);
-        TopStory topStory = mapStoryContent.get(topStoryId);
+        Story topStory = mapStories.get(topStoryId);
 
         binding.tvPosition.setText((position+1) + "");
 
@@ -72,15 +74,28 @@ public class TopStoriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     topStory.getScore()+"",
                     topStory.getBy()));
             binding.tvTime.setReferenceTime(topStory.getTime() * 1000);
-            binding.tvComment.setText(String.format(binding.getRoot().getContext()
-                    .getString(R.string.comment),
+
+            int commentNo = topStory.getKids() == null ? 0 : topStory.getKids().size();
+
+            binding.tvComment.setText(String.format(
+                    commentNo >=2 ? binding.getRoot().getContext().getString(R.string.comment)
+                    : binding.getRoot().getContext().getString(R.string.comment_2),
                     topStory.getKids() == null ? "0" : topStory.getKids().size() + ""));
+
+            binding.getRoot().setTag(topStory);
+            binding.getRoot().setOnClickListener(this);
         }
     }
 
     @Override
     public int getItemCount() {
         return topStoryIds.size();
+    }
+
+    @Override
+    public void onClick(View view) {
+        Story story = (Story) view.getTag();
+        getCommentCallback.onCallback(story);
     }
 
     class TopStoryViewHolder extends RecyclerView.ViewHolder {

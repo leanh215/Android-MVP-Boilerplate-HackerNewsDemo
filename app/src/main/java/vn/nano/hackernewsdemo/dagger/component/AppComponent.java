@@ -4,6 +4,7 @@ import javax.inject.Singleton;
 
 import dagger.Component;
 import vn.nano.hackernewsdemo.dagger.module.AppModule;
+import vn.nano.hackernewsdemo.ui.StoryCommentPresenter;
 import vn.nano.hackernewsdemo.ui.TopStoriesPresenter;
 
 /**
@@ -15,5 +16,7 @@ import vn.nano.hackernewsdemo.ui.TopStoriesPresenter;
 public interface AppComponent {
 
     void inject(TopStoriesPresenter presenter);
+
+    void inject(StoryCommentPresenter presenter);
 
 }

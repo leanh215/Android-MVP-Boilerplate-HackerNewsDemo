@@ -3,5 +3,7 @@
     <string name="title_top_stories">Top Stories</string>
     <string name="title_comment">Comments</string>
     <string name="point_and_author">%1$s points by %2$s</string>
-    <string name="comment">%1$s comment(s)</string>
+    <string name="comment">%1$s comments</string>
+    <string name="comment_2">%1$s comment</string>
+    <string name="no_comment">No comment</string>
 </resources>

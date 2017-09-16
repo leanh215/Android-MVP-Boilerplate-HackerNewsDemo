@@ -8,14 +8,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import java.util.List;
 
-import vn.nano.core_library.mvp.BaseFragment;
+import timber.log.Timber;
 import vn.nano.core_library.mvp.BaseTiFragment;
 import vn.nano.hackernewsdemo.R;
-import vn.nano.hackernewsdemo.data.model.TopStory;
+import vn.nano.hackernewsdemo.data.model.Story;
 import vn.nano.hackernewsdemo.databinding.FragmentTopStoriesBinding;
 import vn.nano.hackernewsdemo.ui.adapter.TopStoriesAdapter;
 import vn.nano.hackernewsdemo.utils.Callback;
@@ -25,7 +24,7 @@ import vn.nano.hackernewsdemo.utils.Callback;
  */
 
 public class TopStoriesFragment extends BaseTiFragment<TopStoriesPresenter, TopStoriesView>
-    implements TopStoriesView, Callback<Integer>{
+    implements TopStoriesView{
 
     public static TopStoriesFragment getInstance() {
         return new TopStoriesFragment();
@@ -37,13 +36,21 @@ public class TopStoriesFragment extends BaseTiFragment<TopStoriesPresenter, TopS
     @NonNull
     @Override
     public TopStoriesPresenter providePresenter() {
+        Timber.e("providePresenter()");
         return new TopStoriesPresenter();
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Timber.e("onCreate()");
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
+        Timber.e("onCreateView()");
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_top_stories, container, false);
         return mBinding.getRoot();
     }
@@ -52,13 +59,18 @@ public class TopStoriesFragment extends BaseTiFragment<TopStoriesPresenter, TopS
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initUI();
-        getPresenter().getTopStoryIds();
+        if (getPresenter().getStoryIds() != null) {
+            displayStoryIds(getPresenter().getStoryIds());
+        } else {
+            getPresenter().getTopStoryIds();
+        }
+
     }
 
     private void initUI() {
         // recycle view
         mBinding.rvTopStories.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mStoriesAdapter = new TopStoriesAdapter(this);
+        mStoriesAdapter = new TopStoriesAdapter(getStoryCallback(), getCommentCallback());
         mBinding.rvTopStories.setAdapter(mStoriesAdapter);
 
         // pull to refresh
@@ -77,13 +89,18 @@ public class TopStoriesFragment extends BaseTiFragment<TopStoriesPresenter, TopS
         mBinding.swipeLayout.setRefreshing(false);
     }
 
-    /**
-     * On request get story
-     * @param storyId
-     */
-    @Override
-    public void onCallback(Integer storyId) {
-        getPresenter().getTopStory(storyId);
+    private Callback<Integer> getStoryCallback() {
+        return storyId -> getPresenter().getTopStory(storyId);
+    }
+
+    private Callback<Story> getCommentCallback() {
+        return story ->
+            getFragmentManager()
+                    .beginTransaction()
+                    .setCustomAnimations(R.anim.enter_from_right, 0, 0, R.anim.exit_to_right)
+                    .add(android.R.id.content, StoryCommentFragment.getInstance(story))
+                    .addToBackStack(null)
+                    .commit();
     }
 
     // ---------- API CALLBACK ---------
@@ -96,8 +113,9 @@ public class TopStoriesFragment extends BaseTiFragment<TopStoriesPresenter, TopS
     }
 
     @Override
-    public void displayStory(TopStory topStory) {
-        mStoriesAdapter.addTopStory(topStory);
+    public void displayStory(Story story) {
+//        mStoriesAdapter.addTopStory(topStory);
+        mBinding.rvTopStories.post(() -> mStoriesAdapter.addTopStory(story));
     }
 
 

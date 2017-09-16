@@ -7,16 +7,14 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:background="?attr/selectableItemBackground"
-        >
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="16dp"
-            >
+            android:padding="16dp">
 
             <TextView
                 android:id="@+id/tv_position"
@@ -45,19 +43,12 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/tv_title"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/textDark"
-                    android:textSize="@dimen/size_16"
-                    tools:text="Story Title" />
-
-                <TextView
-                    android:id="@+id/tv_point_and_author"
+                    android:id="@+id/tv_author"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/textGray"
-                    tools:text="123 points by Alex" />
+                    android:textSize="@dimen/size_16"
+                    tools:text="Author name" />
 
                 <com.github.curioustechizen.ago.RelativeTimeTextView
                     android:id="@+id/tv_time"
@@ -70,8 +61,8 @@
                     android:id="@+id/tv_comment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/textGray"
-                    tools:text="13 comments" />
+                    android:textColor="@color/textDark"
+                    tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit.." />
 
             </LinearLayout>
 
