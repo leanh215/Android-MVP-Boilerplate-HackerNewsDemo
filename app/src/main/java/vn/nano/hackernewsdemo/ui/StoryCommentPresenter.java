@@ -11,6 +11,7 @@ import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 import vn.nano.core_library.mvp.BaseTiPresenter;
 import vn.nano.hackernewsdemo.HackerNewsApplication;
+import vn.nano.hackernewsdemo.dagger.component.ComponentManager;
 import vn.nano.hackernewsdemo.data.model.Comment;
 import vn.nano.hackernewsdemo.data.model.Story;
 import vn.nano.hackernewsdemo.data.remote.HackerNewsService;
@@ -30,7 +31,7 @@ public class StoryCommentPresenter extends BaseTiPresenter<StoryCommentView> {
     private Story story;
 
     public StoryCommentPresenter() {
-        HackerNewsApplication.getInstance().getAppComponent().inject(this);
+        ComponentManager.getInstance().getAppComponent().inject(this);
         mapDownloadedComments = new HashMap<>();
         mapDownloadingComments = new HashMap<>();
     }
@@ -41,6 +42,14 @@ public class StoryCommentPresenter extends BaseTiPresenter<StoryCommentView> {
 
     public void setStory(Story story) {
         this.story = story;
+    }
+
+    public Map<Integer, Comment> getMapDownloadedComments() {
+        return mapDownloadedComments;
+    }
+
+    public void setMapDownloadedComments(Map<Integer, Comment> mapDownloadedComments) {
+        this.mapDownloadedComments = mapDownloadedComments;
     }
 
     public void getComment(int commentId) {

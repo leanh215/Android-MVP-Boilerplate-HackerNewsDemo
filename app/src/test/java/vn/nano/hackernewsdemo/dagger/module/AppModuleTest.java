@@ -11,14 +11,17 @@ import vn.nano.hackernewsdemo.data.remote.HackerNewsService;
  */
 
 @Module
-public class AppModule {
+public class AppModuleTest {
 
-    public AppModule() {
+    private HackerNewsService hackerNewsService;
+
+    public AppModuleTest(HackerNewsService hackerNewsService) {
+        this.hackerNewsService = hackerNewsService;
     }
 
     @Provides
     public HackerNewsService provideHackerNewsService() {
-        return HackerNewsService.Factory.create();
+        return hackerNewsService;
     }
 
 }

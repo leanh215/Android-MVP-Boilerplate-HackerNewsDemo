@@ -10,9 +10,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
-import timber.log.Timber;
 import vn.nano.core_library.mvp.BaseTiPresenter;
-import vn.nano.hackernewsdemo.HackerNewsApplication;
+import vn.nano.hackernewsdemo.dagger.component.ComponentManager;
 import vn.nano.hackernewsdemo.data.model.Story;
 import vn.nano.hackernewsdemo.data.remote.HackerNewsService;
 
@@ -30,7 +29,7 @@ public class TopStoriesPresenter extends BaseTiPresenter<TopStoriesView> {
     private Map<Integer, Boolean> mapDownloadingStory;
 
     public TopStoriesPresenter() {
-        HackerNewsApplication.getInstance().getAppComponent().inject(this);
+        ComponentManager.getInstance().getAppComponent().inject(this);
         mapDownloadedStory = new HashMap<>();
         mapDownloadingStory = new HashMap<>();
     }
@@ -47,13 +46,16 @@ public class TopStoriesPresenter extends BaseTiPresenter<TopStoriesView> {
         // with disposable manager
         manageDisposable(
                 hackerNewsService.getTopStoryIds()
-                        .doOnSubscribe(disposable -> sendToView(view -> view.showLoading(true)))
+                        .doOnSubscribe(disposable -> {
+                            sendToView(view -> view.showLoading(true));
+                        })
                         .doAfterTerminate(() -> sendToView(view -> view.hideLoading()))
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribeWith(new DisposableObserver<List<Integer>>() {
                             @Override
                             public void onNext(@NonNull List<Integer> storyIds) {
+                                System.out.println("getTopStoryIds()=>thread=" + Thread.currentThread() + "; hashCode=" + Thread.currentThread().hashCode());
                                 sendToView(view -> {
                                     setStoryIds(storyIds);
                                     view.displayStoryIds(storyIds);
@@ -109,8 +111,11 @@ public class TopStoriesPresenter extends BaseTiPresenter<TopStoriesView> {
                                 .subscribeWith(new DisposableObserver<Story>() {
                                     @Override
                                     public void onNext(@NonNull Story story) {
+                                        System.out.println("getTopStory()=>thread=" + Thread.currentThread() + "; hashCode=" + Thread.currentThread().hashCode());
                                         mapDownloadedStory.put(storyId, story);
-                                        sendToView(view -> view.displayStory(story));
+                                        sendToView(view -> {
+                                            view.displayStory(story);
+                                        });
                                     }
 
                                     @Override
