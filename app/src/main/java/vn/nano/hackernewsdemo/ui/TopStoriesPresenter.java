@@ -42,6 +42,10 @@ public class TopStoriesPresenter extends BaseTiPresenter<TopStoriesView> {
         this.storyIds = storyIds;
     }
 
+    public Map<Integer, Story> getMapDownloadedStory() {
+        return mapDownloadedStory;
+    }
+
     public void getTopStoryIds() {
         // with disposable manager
         manageDisposable(

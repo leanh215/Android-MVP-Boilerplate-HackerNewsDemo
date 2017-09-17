@@ -22,6 +22,7 @@ import vn.nano.hackernewsdemo.data.model.Comment;
 import vn.nano.hackernewsdemo.data.remote.HackerNewsService;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -143,8 +144,8 @@ public class StoryCommentPresenterTest {
         Comment comment = getFakeComment();
         presenter.getMapDownloadedComments().put(comment.getId(), comment);
 
-        // verify map contains comment
-        assertTrue(presenter.getMapDownloadedComments().containsKey(comment.getId()));
+        // verify data cached
+        assertNotNull(presenter.getMapDownloadedComments().get(comment.getId()));
 
         // start request
         presenter.getComment(comment.getId());
@@ -156,8 +157,6 @@ public class StoryCommentPresenterTest {
 
         // verify data
         assertEquals(comment, argumentCaptorComment.getValue());
-
-
     }
 
     private Comment getFakeComment() {

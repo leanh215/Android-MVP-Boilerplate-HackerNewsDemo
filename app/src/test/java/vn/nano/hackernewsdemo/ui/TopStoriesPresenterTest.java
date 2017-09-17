@@ -24,6 +24,8 @@ import vn.nano.hackernewsdemo.data.model.Story;
 import vn.nano.hackernewsdemo.data.remote.HackerNewsService;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.verify;
@@ -172,6 +174,34 @@ public class TopStoriesPresenterTest {
 
         // verify getTopStory() called
         verify(hackerNewsService).getStory(anyInt());
+    }
+
+    @Test
+    public void getTopStory_FromCached() {
+        // create presenter
+        TopStoriesPresenter presenter = new TopStoriesPresenter();
+        presenter.create();
+        presenter.attachView(topStoriesView);
+        // force ui thread to run on current thread
+        presenter.setUiThreadExecutor(Runnable::run);
+
+        // create fake data and put to cache
+        Story story = getFakeStory();
+        presenter.getMapDownloadedStory().put(story.getId(), story);
+
+        // verify data cached
+        assertNotNull(presenter.getMapDownloadedStory().get(story.getId()));
+
+        // start request
+        presenter.getTopStory(story.getId());
+
+        ArgumentCaptor<Story> argumentCaptorStory = ArgumentCaptor.forClass(Story.class);
+
+        // verify displayStory() called
+        verify(topStoriesView).displayStory(argumentCaptorStory.capture());
+
+        // verify data
+        assertEquals(story, argumentCaptorStory.getValue());
     }
 
     private List<Integer> getFakeStoryIds() {

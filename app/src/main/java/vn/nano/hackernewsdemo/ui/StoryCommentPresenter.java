@@ -48,10 +48,6 @@ public class StoryCommentPresenter extends BaseTiPresenter<StoryCommentView> {
         return mapDownloadedComments;
     }
 
-    public void setMapDownloadedComments(Map<Integer, Comment> mapDownloadedComments) {
-        this.mapDownloadedComments = mapDownloadedComments;
-    }
-
     public void getComment(int commentId) {
         if (mapDownloadingComments.get(commentId) == null || !mapDownloadingComments.get(commentId)) {
             if (mapDownloadedComments.get(commentId) != null) {
