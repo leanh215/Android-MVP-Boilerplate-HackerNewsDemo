@@ -7,8 +7,7 @@ There are two screens
 * Top Stories Screen (use [top stories API](https://hacker-news.firebaseio.com/v0/topstories.json) )
 * Story Comment Screen (use [item API](https://hacker-news.firebaseio.com/v0/item/2921983.json))
 
-<img src="https://firebasestorage.googleapis.com/v0/b/nano-projects.appspot.com/o/photos%2Fscreen_top_stories.png?alt=media" width="200">
-<img src="https://firebasestorage.googleapis.com/v0/b/nano-projects.appspot.com/o/photos%2Fscreen_comment.png?alt=media" width="200">
+<img src="https://firebasestorage.googleapis.com/v0/b/nano-projects.appspot.com/o/photos%2Fscreen_top_stories.png?alt=media" width="200"> <img src="https://firebasestorage.googleapis.com/v0/b/nano-projects.appspot.com/o/photos%2Fscreen_comment.png?alt=media" width="200">
 
 
 ### Third party libraries used in this demo
