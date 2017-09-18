@@ -36,4 +36,17 @@ There are two screens
 * [Fabric.io](https://fabric.io)
 * [Firebase](https://firebase.google.com/docs/android/setup)
 
+## Unit Tests
+### Description
+Since I do not have very well experienced on writing unit tests, with support from my friend [Leo Link](https://github.com/mrleolink), I wrote unit tests with code coverage for presenters of two screens 90% and 98% corresponding. 
 
+<img src="https://firebasestorage.googleapis.com/v0/b/nano-projects.appspot.com/o/photos%2Fcode_coverage.png?alt=media" >
+
+### Code Coverage Step by step
+1. Create JUnit run configuration
+
+<img src="https://firebasestorage.googleapis.com/v0/b/nano-projects.appspot.com/o/photos%2Fcode_coverage_config_1.png?alt=media" width="300"> <img src="https://firebasestorage.googleapis.com/v0/b/nano-projects.appspot.com/o/photos%2Fcode_coverage_config_2.png?alt=media" width="300">
+
+2. Right click to package vn.nano.hackernewsdemo and choose `Run TestWithCodeCoverage With Coverage`
+
+ <img src="https://firebasestorage.googleapis.com/v0/b/nano-projects.appspot.com/o/photos%2Frun_unit_tests.png?alt=media" width="300">
