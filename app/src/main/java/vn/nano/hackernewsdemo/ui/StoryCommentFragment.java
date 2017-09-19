@@ -17,6 +17,7 @@ import vn.nano.hackernewsdemo.data.model.Comment;
 import vn.nano.hackernewsdemo.data.model.Story;
 import vn.nano.hackernewsdemo.databinding.FragmentStoryCommentBinding;
 import vn.nano.hackernewsdemo.ui.adapter.StoryCommentAdapter;
+import vn.nano.hackernewsdemo.uitest.IdlingResourceManager;
 import vn.nano.hackernewsdemo.utils.Callback;
 
 /**
@@ -58,6 +59,12 @@ public class StoryCommentFragment extends BaseTiFragment<StoryCommentPresenter, 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        // Espresso need to wait for comments get downloaded
+        if (IdlingResourceManager.getInstance().getIdlingResource() != null) {
+            IdlingResourceManager.getInstance().getIdlingResource().setIdleState(false);
+        }
+
         initUI();
     }
 
@@ -96,6 +103,8 @@ public class StoryCommentFragment extends BaseTiFragment<StoryCommentPresenter, 
     @Override
     public void displayComment(Comment comment) {
         mBinding.rvComment.post(() -> mCommentAdapter.addComment(comment));
+
+        getPresenter().checkForIdlingResource();
     }
 
     @Override

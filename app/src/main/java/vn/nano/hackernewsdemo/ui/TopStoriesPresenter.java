@@ -14,6 +14,7 @@ import vn.nano.core_library.mvp.BaseTiPresenter;
 import vn.nano.hackernewsdemo.dagger.component.ComponentManager;
 import vn.nano.hackernewsdemo.data.model.Story;
 import vn.nano.hackernewsdemo.data.remote.HackerNewsService;
+import vn.nano.hackernewsdemo.uitest.IdlingResourceManager;
 
 /**
  * Created by alex on 9/14/17.
@@ -50,16 +51,13 @@ public class TopStoriesPresenter extends BaseTiPresenter<TopStoriesView> {
         // with disposable manager
         manageDisposable(
                 hackerNewsService.getTopStoryIds()
-                        .doOnSubscribe(disposable -> {
-                            sendToView(view -> view.showLoading(true));
-                        })
+                        .doOnSubscribe(disposable -> sendToView(view -> view.showLoading(true)))
                         .doAfterTerminate(() -> sendToView(view -> view.hideLoading()))
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribeWith(new DisposableObserver<List<Integer>>() {
                             @Override
                             public void onNext(@NonNull List<Integer> storyIds) {
-                                System.out.println("getTopStoryIds()=>thread=" + Thread.currentThread() + "; hashCode=" + Thread.currentThread().hashCode());
                                 sendToView(view -> {
                                     setStoryIds(storyIds);
                                     view.displayStoryIds(storyIds);
@@ -104,6 +102,7 @@ public class TopStoriesPresenter extends BaseTiPresenter<TopStoriesView> {
             if (mapDownloadedStory.get(storyId) != null) {
                 sendToView(view -> view.displayStory(mapDownloadedStory.get(storyId)));
             } else {
+
                 mapDownloadingStory.put(storyId, true);
 
                 // with disposable manager
@@ -146,6 +145,26 @@ public class TopStoriesPresenter extends BaseTiPresenter<TopStoriesView> {
 //                        });
             }
         }
+    }
+
+    /**
+     * This is for testing purpose
+     */
+    public void checkDownloadingStatus() {
+        // is there any downloading story?
+        if (IdlingResourceManager.getInstance().getIdlingResource() != null) {
+            for (Boolean downloading : mapDownloadingStory.values()) {
+                if (downloading) return;
+            }
+
+            // make sure that first item was loaded
+            if (mapDownloadedStory.get(storyIds.get(0)) != null) {
+                // set idle resource
+                IdlingResourceManager.getInstance().getIdlingResource().setIdleState(true);
+                // after this, the test would perform click on first item story
+            }
+        }
+
     }
 
 }

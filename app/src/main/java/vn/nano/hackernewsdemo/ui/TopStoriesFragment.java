@@ -13,10 +13,12 @@ import java.util.List;
 
 import timber.log.Timber;
 import vn.nano.core_library.mvp.BaseTiFragment;
+import vn.nano.hackernewsdemo.MainActivity;
 import vn.nano.hackernewsdemo.R;
 import vn.nano.hackernewsdemo.data.model.Story;
 import vn.nano.hackernewsdemo.databinding.FragmentTopStoriesBinding;
 import vn.nano.hackernewsdemo.ui.adapter.TopStoriesAdapter;
+import vn.nano.hackernewsdemo.uitest.IdlingResourceManager;
 import vn.nano.hackernewsdemo.utils.Callback;
 
 /**
@@ -24,7 +26,7 @@ import vn.nano.hackernewsdemo.utils.Callback;
  */
 
 public class TopStoriesFragment extends BaseTiFragment<TopStoriesPresenter, TopStoriesView>
-    implements TopStoriesView{
+        implements TopStoriesView {
 
     public static TopStoriesFragment getInstance() {
         return new TopStoriesFragment();
@@ -59,12 +61,17 @@ public class TopStoriesFragment extends BaseTiFragment<TopStoriesPresenter, TopS
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initUI();
+
+        // Espresso need to wait for storyIds and stories get loaded
+        if (IdlingResourceManager.getInstance().getIdlingResource() != null) {
+            IdlingResourceManager.getInstance().getIdlingResource().setIdleState(false);
+        }
+
         if (getPresenter().getStoryIds() != null) {
             displayStoryIds(getPresenter().getStoryIds());
         } else {
             getPresenter().getTopStoryIds();
         }
-
     }
 
     private void initUI() {
@@ -79,13 +86,11 @@ public class TopStoriesFragment extends BaseTiFragment<TopStoriesPresenter, TopS
 
     @Override
     public void showLoading(boolean cancelable) {
-//        super.showLoading(cancelable);
         mBinding.swipeLayout.setRefreshing(true);
     }
 
     @Override
     public void hideLoading() {
-//        super.hideLoading();
         mBinding.swipeLayout.setRefreshing(false);
     }
 
@@ -94,13 +99,14 @@ public class TopStoriesFragment extends BaseTiFragment<TopStoriesPresenter, TopS
     }
 
     private Callback<Story> getCommentCallback() {
-        return story ->
+        return story -> {
             getFragmentManager()
                     .beginTransaction()
                     .setCustomAnimations(R.anim.enter_from_right, 0, 0, R.anim.exit_to_right)
-                    .add(android.R.id.content, StoryCommentFragment.getInstance(story))
+                    .add(android.R.id.content, StoryCommentFragment.getInstance(story), MainActivity.TAG_FRAGMENT_COMMENT)
                     .addToBackStack(null)
                     .commit();
+        };
     }
 
     // ---------- API CALLBACK ---------
@@ -114,8 +120,9 @@ public class TopStoriesFragment extends BaseTiFragment<TopStoriesPresenter, TopS
 
     @Override
     public void displayStory(Story story) {
-//        mStoriesAdapter.addTopStory(topStory);
         mBinding.rvTopStories.post(() -> mStoriesAdapter.addTopStory(story));
+        // if all download has finish => keep going on test to perform click on first item
+        getPresenter().checkDownloadingStatus();
     }
 
 

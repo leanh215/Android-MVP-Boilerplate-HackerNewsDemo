@@ -15,6 +15,7 @@ import vn.nano.hackernewsdemo.dagger.component.ComponentManager;
 import vn.nano.hackernewsdemo.data.model.Comment;
 import vn.nano.hackernewsdemo.data.model.Story;
 import vn.nano.hackernewsdemo.data.remote.HackerNewsService;
+import vn.nano.hackernewsdemo.uitest.IdlingResourceManager;
 
 /**
  * Created by alex on 9/16/17.
@@ -103,6 +104,21 @@ public class StoryCommentPresenter extends BaseTiPresenter<StoryCommentView> {
 //                            throwable.printStackTrace();
 //                        });
             }
+        }
+    }
+
+    /**
+     * For Espresso test purpose
+     */
+    public void checkForIdlingResource() {
+        if (IdlingResourceManager.getInstance().getIdlingResource() != null) {
+            for (Boolean isDownloading: mapDownloadingComments.values()) {
+                if (isDownloading) return;
+            }
+
+            // release idling resource
+            IdlingResourceManager.getInstance().getIdlingResource().setIdleState(true);
+            // after this, perform click on back button to back to TopStoriesFragment
         }
     }
 

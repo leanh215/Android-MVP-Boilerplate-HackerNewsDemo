@@ -1,17 +1,11 @@
 package vn.nano.hackernewsdemo.ui;
 
-import android.support.annotation.NonNull;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
-import java.lang.reflect.Field;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 import io.reactivex.Observable;
 import vn.nano.hackernewsdemo.TrampolineSchedulerRule;
@@ -23,10 +17,7 @@ import vn.nano.hackernewsdemo.data.remote.HackerNewsService;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
