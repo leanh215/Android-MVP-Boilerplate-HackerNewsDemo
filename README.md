@@ -33,14 +33,20 @@ There are two screens
 * Many more..
 
 ### Tracking tools
-* [Fabric.io](https://fabric.io)
+* [Fabric](https://fabric.io)
 * [Firebase](https://firebase.google.com/docs/android/setup)
 
 ## Unit Tests
 ### Description
 Since I'm not very well experienced at writing unit tests, with support from my friend [Leo Link](https://github.com/mrleolink), I wrote unit tests with code coverage for presenters of two screens 90% and 98% corresponding. 
 
-<img src="https://firebasestorage.googleapis.com/v0/b/nano-projects.appspot.com/o/photos%2Fcode_coverage.png?alt=media" >
+<img src="https://firebasestorage.googleapis.com/v0/b/nano-projects.appspot.com/o/photos%2Fcode_coverage.png?alt=media" width="400">
+
+References: 
+
+* [http://site.mockito.org/](http://site.mockito.org/)
+* [https://github.com/googlesamples/android-architecture](https://github.com/googlesamples/android-architecture)
+* [https://medium.com/@fabioCollini/testing-asynchronous-rxjava-code-using-mockito-8ad831a16877](https://medium.com/@fabioCollini/testing-asynchronous-rxjava-code-using-mockito-8ad831a16877)
 
 ### Code Coverage Step by step
 1. Create JUnit run configuration
@@ -50,3 +56,24 @@ Since I'm not very well experienced at writing unit tests, with support from my 
 2. Right click to package vn.nano.hackernewsdemo and choose `Run TestWithCodeCoverage With Coverage`
 
  <img src="https://firebasestorage.googleapis.com/v0/b/nano-projects.appspot.com/o/photos%2Frun_unit_tests.png?alt=media" width="300">
+ 
+ 
+
+## UI Tests
+
+### Description
+Since this is very simple demo with two screen, the UI test would be simple with following scenario:
+1. TopStoriesFragment was displayed. 
+2. Wait for topStoryIds and stories (visible one) get loaded
+3. Click first story in list to move to StoryCommentFragment
+4. Verify StoryCommentFragment was displayed.
+5. Wait for comments get loaded
+6. Click back to go back to TopStoriesFragment
+7. Verify StoryCommentFragment was removed
+
+ <img src="https://firebasestorage.googleapis.com/v0/b/nano-projects.appspot.com/o/photos%2Finstrument_test.gif?alt=media" width="300">
+ 
+References:
+
+* [https://developer.android.com/training/testing/espresso/index.html](https://developer.android.com/training/testing/espresso/index.html)
+* [https://developer.android.com/studio/test/espresso-test-recorder.html](https://developer.android.com/studio/test/espresso-test-recorder.html)
